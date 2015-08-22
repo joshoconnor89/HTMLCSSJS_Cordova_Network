@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Contact Example</title>
+
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8">
+
+    // onSuccess: Get a snapshot of the current contacts
+document.addEventListener("deviceready", init, false);
+function init() {
+    checkConnection();
+    navigator.contacts.find(
+        [navigator.contacts.fieldType.displayName],
+        gotContacts,
+        errorHandler);
+}
+
+function errorHandler(e) {
+    console.log("errorHandler: "+e);
+}
+
+function gotContacts(c) {
+    alert("gotContacts, number of results "+c.length);
+   picDiv = document.querySelector("#pictures");
+    for(var i=0, len=c.length; i<len; i++) {
+        console.dir(c[i]);
+        if(c[i].photos && c[i].photos.length > 0) {
+            picDiv.innerHTML += "<img src='"+c[i].photos[0].value+"'>";
+        }
+    }
+}
+
+
+function checkConnection() {
+    var networkState = navigator.connection.type;
+    alert(networkState);
+
+    var states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi connection';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.CELL]     = 'Cell generic connection';
+    states[Connection.NONE]     = 'No network connection';
+
+   document.getElementById("connection").innerHTML = "Curent Connection:" + states[networkState];
+}
+
+
+    </script>
+  </head>
+  <body>
+    <h1 id= "connection"></h1>
+    <p id="pictures">Find Contacts</p>
+
+  </body>
+</html>
